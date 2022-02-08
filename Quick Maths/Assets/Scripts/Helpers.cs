@@ -32,7 +32,7 @@ public static class Helpers
         string operatorText = "+";
         int answer = 0;
 
-        switch (GetRandomNumber(3))
+        switch (GetRandomNumber(4))
         {
             case 0:
                 value1 = GetRandomNumber(90, 2);
