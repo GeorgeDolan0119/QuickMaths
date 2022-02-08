@@ -57,7 +57,7 @@ public static class Helpers
 
             case 3:
                 value1 = GetRandomNumber(90, 2);
-                value2 = value1 > 10 ? GetRandomNumber(9, 2) : GetRandomNumber(90, 2);
+                value2 = value1 > 10 ? GetRandomNumber(9, 2) : GetRandomNumber(value1, 2);
                 answer += DivideNumbers(value1, value2);
                 operatorText = "%";
                 break;
