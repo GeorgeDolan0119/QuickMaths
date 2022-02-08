@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,10 +6,39 @@ public class NumPad : MonoBehaviour
 {
     [SerializeField] TMP_Text answerText;
 
+    public int Answer
+    {
+        get
+        {
+            try
+            {
+                return Convert.ToInt32(answerText.text);
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+    }
+
+
+    private void OnEnable()
+    {
+        GameManager.OnSubmitAnswer += ResetAnswer;
+    }
+
+
+    private void OnDisable()
+    {
+        GameManager.OnSubmitAnswer -= ResetAnswer;
+    }
+
+
     private void Start()
     {
         ResetAnswer();
     }
+
 
     public void AppendNumber(int value)
     {
@@ -18,16 +46,20 @@ public class NumPad : MonoBehaviour
         {
             answerText.text += value.ToString();
         }
+
+        GetComponent<AudioSource>().Play();
     }
+
 
     public void ResetAnswer()
     {
         answerText.text = "";
     }
 
+
     public void SubmitAnswer()
     {
-        //Submit
-        ResetAnswer();
+        GameManager.ValidateAnswer(Answer);
+        GameManager.SubmitAnswer();
     }
 }
