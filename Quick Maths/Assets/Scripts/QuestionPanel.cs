@@ -19,9 +19,14 @@ public class QuestionPanel : MonoBehaviour
     private Animator animator;
     private AudioSource audioSource;
 
+    private bool endlessGame;
 
     private void OnEnable()
     {
+        GameManager.OnNewGame += CreateQuestion;
+        GameManager.OnNewEndlessGame += EnableLives;
+        GameManager.OnNewTimeGame += DisableLives;
+
         GameManager.OnSubmitAnswer += CreateQuestion;
         GameManager.OnValidateAnswer += ValidateAnswer;
 
@@ -32,14 +37,24 @@ public class QuestionPanel : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.OnNewGame -= CreateQuestion;
+        GameManager.OnNewEndlessGame -= EnableLives;
+        GameManager.OnNewTimeGame -= DisableLives;
+
         GameManager.OnSubmitAnswer -= CreateQuestion;
         GameManager.OnValidateAnswer -= ValidateAnswer;
     }
 
 
-    void Start()
+    private void EnableLives()
     {
-        CreateQuestion();
+        endlessGame = true;
+    }
+
+
+    private void DisableLives()
+    {
+        endlessGame = false;
     }
 
 
@@ -55,6 +70,7 @@ public class QuestionPanel : MonoBehaviour
         mathOperator.text = question.operatorText;
     }
 
+
     private void ValidateAnswer(int answer)
     {
         if(answer == GameManager.CurrentQuestion.answer)
@@ -67,6 +83,16 @@ public class QuestionPanel : MonoBehaviour
         {
             mainCanvasAnimator.Play("MainCanvas_Incorrect");
             audioSource.PlayOneShot(incorrectSFX);
+
+            //If mode is endless?
+            if (endlessGame)
+            {
+                GameManager.IncrementMistakeCount();
+            }
+            else
+            {
+                GameManager.DecrementScore();
+            }
         }
     }
 }

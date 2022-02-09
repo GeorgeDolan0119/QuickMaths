@@ -21,10 +21,13 @@ public class NumPad : MonoBehaviour
         }
     }
 
+    private AudioSource audioSource;
+
 
     private void OnEnable()
     {
         GameManager.OnSubmitAnswer += ResetAnswer;
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -47,7 +50,26 @@ public class NumPad : MonoBehaviour
             answerText.text += value.ToString();
         }
 
-        GetComponent<AudioSource>().Play();
+        audioSource.Play();
+    }
+
+    public void AppendMinus()
+    {
+        if (answerText.text.Length < 1)
+        {
+            answerText.text += "-";
+        }
+
+        audioSource.Play();
+    }
+
+    public void DeleteLastNumber()
+    {
+        if(answerText.text.Length - 1 >= 0)
+        {
+            answerText.text = answerText.text.Remove(answerText.text.Length - 1);
+            audioSource.Play();
+        }
     }
 
 
