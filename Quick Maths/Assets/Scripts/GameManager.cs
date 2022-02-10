@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public const int TimeMode = 0;
+    public const int EndlessMode = 1;
+
     const int maxMistakesPerGame = 3;
 
     public static void NewGame() => OnNewGame?.Invoke();
@@ -13,17 +16,17 @@ public class GameManager : MonoBehaviour
     public static void NewEndlessGame() => OnNewEndlessGame?.Invoke();
     public static Action OnNewEndlessGame;
 
-    public static void EndEndlessGame(int lastScore) => OnEndEndlessGame?.Invoke(lastScore);
-    public static Action<int> OnEndEndlessGame;
-
     public static void NewTimeGame() => OnNewTimeGame?.Invoke();
     public static Action OnNewTimeGame;
+
+    public static void EndEndlessGame(int lastScore) => OnEndEndlessGame?.Invoke(lastScore);
+    public static Action<int> OnEndEndlessGame;
 
     public static void EndTimeGame(int lastScore) => OnEndTimeGame?.Invoke(lastScore);
     public static Action<int> OnEndTimeGame;
 
-    public static void HighScoreAchieved() => OnHighScoreAchieved?.Invoke();
-    public static Action OnHighScoreAchieved;
+    public static void HighScoreAchieved(int gameMode) => OnHighScoreAchieved?.Invoke(gameMode);
+    public static Action<int> OnHighScoreAchieved;
 
 
 
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
         OnIncrementMistakeCount += IncrementMistake;
         OnNewEndlessGame += StartEndlessMode;
         OnNewTimeGame += StartTimeMode;
+        OnEndTimeGame += EndTimeMode;
     }
 
 
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour
         OnIncrementMistakeCount -= IncrementMistake;
         OnNewEndlessGame -= StartEndlessMode;
         OnNewTimeGame -= StartTimeMode;
+        OnEndTimeGame -= EndTimeMode;
     }
 
 
@@ -97,19 +102,13 @@ public class GameManager : MonoBehaviour
 
         //Game Over UI?
         gameOverAnimator.Play("Open");
-
-        //If score is in Top 3, open High Score Canvas?
     }
 
 
-    private void EndTimeMode()
+    private void EndTimeMode(int f)
     {
-        //Game Over
-
         //Game Over UI?
         gameOverAnimator.Play("Open");
-
-        //If score is in Top 3, open High Score Canvas?
     }
 
 

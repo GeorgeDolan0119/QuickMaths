@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HighScorePanel : MonoBehaviour
 {
-    const int hs1 = 100;
-    const int hs2 = 75;
-    const int hs3 = 50;
-
     [SerializeField] TMP_Text highScore1Text;
     [SerializeField] TMP_Text highScore2Text;
     [SerializeField] TMP_Text highScore3Text;
 
+    [SerializeField] Image timeBlackOut;
+    [SerializeField] Image endlessBlackOut;
+
     public static HighScoreData highScoreData;
+
+
 
     private void OnEnable()
     {
@@ -34,27 +34,58 @@ public class HighScorePanel : MonoBehaviour
     private void Awake()
     {
         highScoreData = HighScoreData.GetHighScoreData();
-        //DrawTimedHighScores();
     }
 
-    private void OpenHighScorePanel()
+
+    private void OpenHighScorePanel(int gameMode)
     {
         GetComponent<Animator>().Play("Open");
+        switch (gameMode)
+        {
+            case GameManager.TimeMode:
+                SelectTimedHighScores();
+                break;
+
+            case GameManager.EndlessMode:
+                SelectEndlessHighScores();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+    public void SelectTimedHighScores()
+    {
+        GetComponent<Animator>().Play("Refresh Scores");
+        DrawTimedHighScores();
     }
 
 
     public void DrawTimedHighScores()
     {
-        GetComponent<Animator>().Play("Refresh Scores");
+        timeBlackOut.enabled = false;
+        endlessBlackOut.enabled = true;
+
         highScore1Text.text = AssignScoreText(highScoreData.timedHighScoreGold);
         highScore2Text.text = AssignScoreText(highScoreData.timedHighScoreSilver);
         highScore3Text.text = AssignScoreText(highScoreData.timedHighScoreBronze);
     }
 
 
-    public void DrawEndlessHighScores()
+    public void SelectEndlessHighScores()
     {
         GetComponent<Animator>().Play("Refresh Scores");
+        DrawEndlessHighScores();
+    }
+
+
+    private void DrawEndlessHighScores()
+    {
+        timeBlackOut.enabled = true;
+        endlessBlackOut.enabled = false;
+
         highScore1Text.text = AssignScoreText(highScoreData.endlessHighScoreGold);
         highScore2Text.text = AssignScoreText(highScoreData.endlessHighScoreSilver);
         highScore3Text.text = AssignScoreText(highScoreData.endlessHighScoreBronze);
@@ -66,29 +97,32 @@ public class HighScorePanel : MonoBehaviour
         return highScore > 0 ? highScore.ToString() : "-";
     }
 
+
     private void CheckTimeHighScore(int recentScore)
     {
         if (recentScore > highScoreData.timedHighScoreBronze)
         {
             if (recentScore > highScoreData.timedHighScoreGold)
             {
-                highScoreData.timedHighScoreSilver = highScoreData.timedHighScoreGold;
+                //Achieved Gold
                 highScoreData.timedHighScoreBronze = highScoreData.timedHighScoreSilver;
+                highScoreData.timedHighScoreSilver = highScoreData.timedHighScoreGold;
                 highScoreData.timedHighScoreGold = recentScore;
             }
             else if (recentScore > highScoreData.timedHighScoreSilver)
             {
+                //Achieved Silver
                 highScoreData.timedHighScoreBronze = highScoreData.timedHighScoreSilver;
                 highScoreData.timedHighScoreSilver = recentScore;
             }
             else
             {
+                //Achieved Bronze
                 highScoreData.timedHighScoreBronze = recentScore;
             }
 
-            GameManager.HighScoreAchieved();
-            var highScoreJSON = JsonUtility.ToJson(highScoreData);
-            HighScoreData.SetHighScoreData(highScoreJSON);
+            GameManager.HighScoreAchieved(GameManager.TimeMode);
+            UpdateHighScoreJSON();
         }
     }
 
@@ -99,23 +133,32 @@ public class HighScorePanel : MonoBehaviour
         {
             if (recentScore > highScoreData.endlessHighScoreGold)
             {
-                highScoreData.endlessHighScoreSilver = highScoreData.endlessHighScoreGold;
+                //Achieved Gold
                 highScoreData.endlessHighScoreBronze = highScoreData.endlessHighScoreSilver;
+                highScoreData.endlessHighScoreSilver = highScoreData.endlessHighScoreGold;
                 highScoreData.endlessHighScoreGold = recentScore;
             }
             else if (recentScore > highScoreData.endlessHighScoreSilver)
             {
+                //Achieved Silver
                 highScoreData.endlessHighScoreBronze = highScoreData.endlessHighScoreSilver;
                 highScoreData.endlessHighScoreSilver = recentScore;
             }
             else
             {
+                //Achieved Bronze
                 highScoreData.endlessHighScoreBronze = recentScore;
             }
 
-            GameManager.HighScoreAchieved();
-            var highScoreJSON = JsonUtility.ToJson(highScoreData);
-            HighScoreData.SetHighScoreData(highScoreJSON);
+            GameManager.HighScoreAchieved(GameManager.EndlessMode);
+            UpdateHighScoreJSON();
         }
+    }
+
+
+    private void UpdateHighScoreJSON()
+    {
+        var highScoreJSON = JsonUtility.ToJson(highScoreData);
+        HighScoreData.SetHighScoreData(highScoreJSON);
     }
 }

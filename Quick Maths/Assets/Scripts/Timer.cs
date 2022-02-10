@@ -81,14 +81,19 @@ public class Timer : MonoBehaviour
         {
             timer -= Time.deltaTime;
 
-            string minutes = Mathf.Floor(timer / 60).ToString("00");
-            string seconds = Mathf.Floor(timer % 60).ToString("00");
-            timerText.text = $"{minutes}:{seconds}";
+            float minutes = Mathf.Floor(timer / 60);
+            float seconds = Mathf.Floor(timer % 60);
+
+            string minutesString = Mathf.Clamp(minutes, 0, minutes).ToString("00");
+            string secondsString = Mathf.Clamp(seconds, 0, seconds).ToString("00");
+
+            timerText.text = $"{minutesString}:{secondsString}";
         }
         else
         {
             //Time up
             GameManager.EndTimeGame(ScoreCounter.currentScore);
+            timeModeTimer = false;
         }
     }
 }
