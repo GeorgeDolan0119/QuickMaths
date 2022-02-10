@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     public static Question CurrentQuestion { get; set; }
 
+    [SerializeField] Animator pauseMenuAnimator;
     [SerializeField] Animator gameOverAnimator;
 
     private int mistakeCounter;
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
         OnNewEndlessGame += StartEndlessMode;
         OnNewTimeGame += StartTimeMode;
         OnEndTimeGame += EndTimeMode;
+        OnNewGame += ClosePauseMenu;
     }
 
 
@@ -72,13 +74,13 @@ public class GameManager : MonoBehaviour
         OnNewEndlessGame -= StartEndlessMode;
         OnNewTimeGame -= StartTimeMode;
         OnEndTimeGame -= EndTimeMode;
+        OnNewGame -= ClosePauseMenu;
     }
 
 
-    private void Start()
+    private void ClosePauseMenu()
     {
-        //NewEndlessGame();
-        //NewTimeGame();
+        pauseMenuAnimator.Play("Close");
     }
 
 

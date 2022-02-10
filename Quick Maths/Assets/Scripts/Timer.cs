@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    const int timeModeDuration = 30;
+    const int timeModeDuration = 3;
 
     [SerializeField] TMP_Text timerText;
     private float timer;
@@ -29,6 +29,7 @@ public class Timer : MonoBehaviour
 
     private void EnableEndlessModeTimer()
     {
+        timeModeTimer = false;
         endlessModeTimer = true;
         ResetTimer(0);
     }
@@ -37,13 +38,8 @@ public class Timer : MonoBehaviour
     private void EnableTimeModeTimer()
     {
         timeModeTimer = true;
+        endlessModeTimer = false;
         ResetTimer(timeModeDuration);
-    }
-
-
-    private void PauseTimer()
-    {
-
     }
 
 

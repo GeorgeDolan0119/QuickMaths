@@ -13,6 +13,7 @@ public class HighScorePanel : MonoBehaviour
 
     public static HighScoreData highScoreData;
 
+    private Animator animator;
 
 
     private void OnEnable()
@@ -39,7 +40,7 @@ public class HighScorePanel : MonoBehaviour
 
     private void OpenHighScorePanel(int gameMode)
     {
-        GetComponent<Animator>().Play("Open");
+        animator.Play("Open");
         switch (gameMode)
         {
             case GameManager.TimeMode:
@@ -58,7 +59,7 @@ public class HighScorePanel : MonoBehaviour
 
     public void SelectTimedHighScores()
     {
-        GetComponent<Animator>().Play("Refresh Scores");
+        animator.Play("Refresh Scores");
         DrawTimedHighScores();
     }
 
@@ -76,7 +77,7 @@ public class HighScorePanel : MonoBehaviour
 
     public void SelectEndlessHighScores()
     {
-        GetComponent<Animator>().Play("Refresh Scores");
+        animator.Play("Refresh Scores");
         DrawEndlessHighScores();
     }
 
@@ -100,8 +101,10 @@ public class HighScorePanel : MonoBehaviour
 
     private void CheckTimeHighScore(int recentScore)
     {
+        recentScore = 100;
         if (recentScore > highScoreData.timedHighScoreBronze)
         {
+            animator.Play("New Score Open");
             if (recentScore > highScoreData.timedHighScoreGold)
             {
                 //Achieved Gold
@@ -131,6 +134,7 @@ public class HighScorePanel : MonoBehaviour
     {
         if(recentScore > highScoreData.endlessHighScoreBronze)
         {
+            animator.Play("New Score Open");
             if (recentScore > highScoreData.endlessHighScoreGold)
             {
                 //Achieved Gold

@@ -12,6 +12,7 @@ public class ScoreCounter : MonoBehaviour
     private void OnEnable()
     {
         UpdateScoreUI();
+        GameManager.OnNewGame += ResetScore;   
         GameManager.OnIncrementScore += IncrementScore;   
         GameManager.OnDecrementScore += DecrementScore;   
     }
@@ -19,8 +20,16 @@ public class ScoreCounter : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.OnNewGame -= ResetScore;
         GameManager.OnIncrementScore -= IncrementScore;
         GameManager.OnDecrementScore -= DecrementScore;
+    }
+
+
+    private void ResetScore()
+    {
+        currentScore = 0;
+        UpdateScoreUI();
     }
 
 
