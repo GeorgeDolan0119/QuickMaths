@@ -52,14 +52,14 @@ public static class Helpers
                 value1 = GetRandomNumber(90, 2);
                 value2 = value1 > 20 ? GetRandomNumber(20, 2) : GetRandomNumber(90, 2);
                 answer += MultiplyNumbers(value1, value2);
-                operatorText = "x";
+                operatorText = "×";
                 break;
 
             case 3:
                 value1 = GetRandomNumber(90, 2);
                 value2 = value1 > 10 ? GetRandomNumber(9, 2) : GetRandomNumber(value1, 2);
                 answer += DivideNumbers(value1, value2);
-                operatorText = "%";
+                operatorText = "÷";
                 break;
         }
 

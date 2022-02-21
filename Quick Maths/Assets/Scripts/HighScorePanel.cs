@@ -18,6 +18,7 @@ public class HighScorePanel : MonoBehaviour
 
     private void OnEnable()
     {
+        animator = GetComponent<Animator>();
         GameManager.OnEndEndlessGame += CheckEndlessHighScore;
         GameManager.OnEndTimeGame += CheckTimeHighScore;
         GameManager.OnHighScoreAchieved += OpenHighScorePanel;
@@ -101,7 +102,6 @@ public class HighScorePanel : MonoBehaviour
 
     private void CheckTimeHighScore(int recentScore)
     {
-        recentScore = 100;
         if (recentScore > highScoreData.timedHighScoreBronze)
         {
             animator.Play("New Score Open");

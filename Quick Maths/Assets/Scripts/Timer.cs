@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    const int timeModeDuration = 3;
+    const int timeModeDuration = 180;
 
     [SerializeField] TMP_Text timerText;
     private float timer;

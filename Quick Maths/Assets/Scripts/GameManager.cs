@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -18,6 +19,9 @@ public class GameManager : MonoBehaviour
 
     public static void NewTimeGame() => OnNewTimeGame?.Invoke();
     public static Action OnNewTimeGame;
+
+    public static void EndGame() => OnEndGame?.Invoke();
+    public static Action OnEndGame;
 
     public static void EndEndlessGame(int lastScore) => OnEndEndlessGame?.Invoke(lastScore);
     public static Action<int> OnEndEndlessGame;
@@ -78,6 +82,28 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if (Input.GetKeyDown("s"))
+        {
+            TakeScreenshot();
+        }
+    }
+
+    public void TakeScreenshot()
+    {
+        string folderPath = Directory.GetCurrentDirectory() + "/Screenshots/";
+
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
+        var screenshotName = $"Screenshot_{DateTime.Now:dd-MM-yyyy-HH-mm-ss}.png";
+        ScreenCapture.CaptureScreenshot(Path.Combine(folderPath, screenshotName));
+        Debug.Log(folderPath + screenshotName);
+    }
+
     private void ClosePauseMenu()
     {
         pauseMenuAnimator.Play("Close");
@@ -100,6 +126,7 @@ public class GameManager : MonoBehaviour
     private void EndEndlessMode()
     {
         //Game Over
+        GameManager.EndGame();
         GameManager.EndEndlessGame(ScoreCounter.currentScore);
 
         //Game Over UI?
@@ -109,6 +136,7 @@ public class GameManager : MonoBehaviour
 
     private void EndTimeMode(int f)
     {
+        GameManager.EndGame();
         //Game Over UI?
         gameOverAnimator.Play("Open");
     }
