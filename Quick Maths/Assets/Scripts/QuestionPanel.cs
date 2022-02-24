@@ -71,9 +71,40 @@ public class QuestionPanel : MonoBehaviour
     }
 
 
-    private void ValidateAnswer(int answer)
+    private bool WithinDecimalRange(double answer)
     {
-        if(answer == GameManager.CurrentQuestion.answer)
+        double calc = answer - GameManager.CurrentQuestion.answer;
+
+        if (answer > GameManager.CurrentQuestion.answer)
+        {
+            if (calc > 0 && calc <= 0.07f)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if(answer < GameManager.CurrentQuestion.answer)
+        {
+            if (calc < 0 && calc >= -0.07f)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        return false;
+    }
+
+    private void ValidateAnswer(double answer)
+    {
+        if(answer == GameManager.CurrentQuestion.answer || WithinDecimalRange(answer))
         {
             GameManager.IncrementScore();
             mainCanvasAnimator.Play("MainCanvas_Correct");

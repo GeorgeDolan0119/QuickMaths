@@ -6,13 +6,13 @@ public class NumPad : MonoBehaviour
 {
     [SerializeField] TMP_Text answerText;
 
-    public int Answer
+    public double Answer
     {
         get
         {
             try
             {
-                return Convert.ToInt32(answerText.text);
+                return Convert.ToDouble(answerText.text);
             }
             catch (Exception)
             {
@@ -53,6 +53,7 @@ public class NumPad : MonoBehaviour
         audioSource.Play();
     }
 
+
     public void AppendMinus()
     {
         if (answerText.text.Length < 1)
@@ -62,6 +63,14 @@ public class NumPad : MonoBehaviour
 
         audioSource.Play();
     }
+
+
+    public void AppendDecimal()
+    {
+        answerText.text += ".";
+        audioSource.Play();
+    }
+
 
     public void DeleteLastNumber()
     {
